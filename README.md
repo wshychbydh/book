@@ -126,7 +126,7 @@
         .registerViewHolder(Book::class.java, BookViewHolder::class.java) （必填）
         .build()
     
-    //右侧导航栏的样式    
+    //右侧导航栏的样式 (选填)   
     val barParams = BarParams.Builder()
         .setMinWidth()              
         .setBackgroundDrawable()
@@ -144,19 +144,19 @@
         .setToastViewDismissAnim()
         .build()    
      
-    //粘性头部样式 
+    //粘性头部样式 (选填)
     val stickyParams = QuickStickyParams.Builder()
-        .setTitleHeight()
-        .setDivider()
-        .isShowStickyHeader()
-        .isShowFirstGroup()
+        .setTitleHeight()      //分组标题的高度
+        .setDivider()          //RecyclerView分割线
+        .isShowStickyHeader()  //是否显示粘性分组，默认true
+        .isShowFirstGroup()    //是否选择第一个分组，默认false
         .setBackgroundColor()
         .setTextColor()
         .setTextPaddingLeft()
         .setTextSize()
         .build()  
     
-    //快速选择分组后的toast提示样式
+    //快速选择分组后的toast提示样式 (选填)
     val toastParams = QuickToastParams.Builder()
         .setToastViewWidth()
         .setToastViewHeight()
