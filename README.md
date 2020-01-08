@@ -67,26 +67,36 @@
     
     data class Hot(
         private val key: String,  //该数据所在分组，如"热"
+        val content: String   //用于显示的内容（自定义）
         ... 
     ) : IQuickProvider {
       override fun getKey(): String {
         return key
+      }
+      
+      override fun getSearchKey(): String {
+        return content   //用于模糊匹配搜素的内容（自定义）
       }
     }
     
     data class Book(
         private val key: String,  //该数据所在分组，如"A","B"...
+        val content: String   //用于显示的内容（自定义）
         ... 
     ) : IQuickProvider {
       override fun getKey(): String {
         return key
       }
+      
+      override fun getSearchKey(): String {
+        return content   //用于模糊匹配搜素的内容（自定义）
+      }
     }
 ```
 
-5、定义RecyclerView的ViewHolder，ViewHolder的使用方式参考(https://github.com/wshychbydh/recyclerAdapter)
+5、定义RecyclerView的ViewHolder
 ```
-  @LayoutId(R.layout.hot_item)
+  @LayoutId(R.layout.hot_item) 或 @LayoutName("hot_item")
   class HotViewHolder(itemView: View) : DataViewHolder<Hot>(itemView) {
     private var hotItemTv: TextView = itemView.findViewById(R.id.hot_item_tv)
 
@@ -96,7 +106,7 @@
     }
   }  
 
-  @LayoutId(R.layout.book_item)
+  @LayoutId(R.layout.book_item)  或 @LayoutName("book_item")
   class BookViewHolder(itemView: View) : DataViewHolder<Book>(itemView) {
     private var bookItemTv: TextView = itemView.findViewById(R.id.book_item_tv)
 
@@ -174,6 +184,11 @@
         .build()
     
     quickView.setup(quickParams)
+```
+
+8、搜索，默认是在调用线程中执行 
+```
+    quickView.search(key)  //返回搜索结果
 ```
     
 #### 联系方式 wshychbydh@gmail.com
