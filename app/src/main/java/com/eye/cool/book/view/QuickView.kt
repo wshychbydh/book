@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.eye.cool.adapter.support.RecyclerAdapter
 import com.eye.cool.book.R
+import com.eye.cool.book.adapter.RecyclerAdapter
 import com.eye.cool.book.params.BarParams
 import com.eye.cool.book.params.QuickViewParams
 import com.eye.cool.book.support.IQuickProvider
@@ -29,6 +29,9 @@ class QuickView @JvmOverloads constructor(
 
   private var stickyKeys: SparseArray<String>? = null
 
+  @Volatile
+  private var params: QuickViewParams? = null
+
   init {
     val view = LayoutInflater.from(context).inflate(R.layout.book_quick_view, this, true)
     recyclerView = view.findViewById(R.id.quickRecyclerView)
@@ -40,7 +43,28 @@ class QuickView @JvmOverloads constructor(
     recyclerView.setHasFixedSize(true)
   }
 
+  /**
+   * Search by keyword
+   *
+   * @return Returns the result that meets the criteria
+   */
+  fun search(key: String): List<IQuickProvider> {
+    if (key.isNullOrEmpty()) return emptyList()
+    val values = params?.dataParams?.data?.values ?: return emptyList()
+    val result = arrayListOf<IQuickProvider>()
+    values.forEach { list ->
+      result.addAll(list.filter {
+        it.getSearchKey().contains(key)
+      })
+    }
+    return result
+  }
+
+  /**
+   * Setup with params to display
+   */
   fun setup(params: QuickViewParams) {
+    this.params = params
     params.dataParams?.apply {
       viewHolders?.forEach {
         adapter.registerViewHolder(it.key, it.value)

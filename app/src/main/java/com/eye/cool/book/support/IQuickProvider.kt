@@ -11,4 +11,9 @@ interface IQuickProvider {
    * Grouping keywords
    */
   fun getKey(): String
+
+  /**
+   * Searching keywords
+   */
+  fun getSearchKey(): String
 }

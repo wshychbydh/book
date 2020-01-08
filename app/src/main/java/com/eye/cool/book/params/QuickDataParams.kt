@@ -1,6 +1,6 @@
 package com.eye.cool.book.params
 
-import com.eye.cool.adapter.support.DataViewHolder
+import com.eye.cool.book.adapter.DataViewHolder
 import com.eye.cool.book.support.IQuickProvider
 
 /**
@@ -14,8 +14,13 @@ class QuickDataParams private constructor() {
 
   class Builder {
 
-    val params = QuickDataParams()
+    private val params = QuickDataParams()
 
+    /**
+     * Association grouping and data for display
+     *
+     * @param data
+     */
     fun setData(data: LinkedHashMap<String, List<IQuickProvider>>): Builder {
       params.data = data
       return this
@@ -28,6 +33,12 @@ class QuickDataParams private constructor() {
       return this
     }
 
+    /**
+     * Grouping data display style
+     *
+     * @param dataClass grouping type
+     * @param viewHolder display style
+     */
     fun registerViewHolder(dataClass: Class<out IQuickProvider>, viewHolder: Class<out DataViewHolder<out IQuickProvider>>): Builder {
       params.viewHolders[dataClass] = viewHolder
       return this
