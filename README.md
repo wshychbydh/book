@@ -23,7 +23,7 @@
 2、在项目的build.gradle中添加依赖
 ```
     dependencies {
-        implementation 'com.github.wshychbydh:book:1.0.1'
+        implementation 'com.github.wshychbydh:book:1.0.2'
     }
 ```
 
@@ -191,6 +191,15 @@
     quickView.search(key)  //返回搜索结果
 ```
     
-#### 联系方式 wshychbydh@gmail.com
+
+#####   
+ 
+**Demo地址：(https://github.com/wshychbydh/SampleDemo)**    
+    
+##
+
+###### **欢迎fork，更希望你能贡献commit.** (*￣︶￣)    
+
+###### 联系方式 wshychbydh@gmail.com
 
 [![](https://jitpack.io/v/wshychbydh/book.svg)](https://jitpack.io/#wshychbydh/book)
