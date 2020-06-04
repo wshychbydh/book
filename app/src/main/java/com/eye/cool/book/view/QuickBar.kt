@@ -240,15 +240,6 @@ class QuickBar @JvmOverloads constructor(
   }
 
   companion object {
-    fun dipTopx(context: Context, dpValue: Float): Int {
-      val scale = context.resources.displayMetrics.density
-      return (dpValue * scale + 0.5f).toInt()
-    }
-
-    fun pxTodip(context: Context, pxValue: Int): Float {
-      val density = context.resources.displayMetrics.density
-      return density * pxValue
-    }
 
     private fun getDipValue(context: Context, value: Float): Float {
       return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,

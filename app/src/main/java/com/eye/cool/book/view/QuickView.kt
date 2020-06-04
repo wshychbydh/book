@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.eye.cool.book.R
 import com.eye.cool.book.adapter.RecyclerAdapter
 import com.eye.cool.book.params.BarParams
@@ -21,7 +22,7 @@ class QuickView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-  private val recyclerView: androidx.recyclerview.widget.RecyclerView
+  private val recyclerView: RecyclerView
   private val quickBar: QuickBar
   private val layoutManager = LinearLayoutManager(context)
   private val adapter = RecyclerAdapter()
