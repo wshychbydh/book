@@ -3,50 +3,42 @@ package com.eye.cool.book.params
 /**
  *Created by ycb on 2020/1/7 0007
  */
-class QuickViewParams private constructor() {
+class QuickViewParams private constructor(
+    internal val barParams: QuickBarParams,
+    internal val stickyParams: QuickStickyParams,
+    internal val toastParams: QuickToastParams,
+    internal val dataParams: QuickDataParams
+) {
 
-  internal var barParams: BarParams = BarParams.Builder().build()
+  companion object {
+    inline fun build(
+        data: QuickDataParams,
+        block: Builder.() -> Unit
+    ) = Builder(data).apply(block).build()
+  }
 
-  internal var stickyParams: QuickStickyParams = QuickStickyParams.Builder().build()
+  data class Builder(
+      var dataParams: QuickDataParams,
+      var barParams: QuickBarParams = QuickBarParams.Builder().build(),
+      var stickyParams: QuickStickyParams = QuickStickyParams.Builder().build(),
+      var toastParams: QuickToastParams = QuickToastParams.Builder().build()
+  ) {
 
-  internal var toastParams: QuickToastParams = QuickToastParams.Builder().build()
-
-  internal var dataParams: QuickDataParams? = null
-
-  class Builder {
-
-    private val quickParams = QuickViewParams()
-
-    fun setQuickStickyParams(stickyParams: QuickStickyParams): Builder {
-      quickParams.stickyParams = stickyParams
-      return this
+    fun quickStickyParams(stickyParams: QuickStickyParams) = apply {
+      this.stickyParams = stickyParams
     }
 
-    fun setQuickBarParams(barParams: BarParams): Builder {
-      quickParams.barParams = barParams
-      return this
-    }
+    fun quickBarParams(barParams: QuickBarParams) = apply { this.barParams = barParams }
 
-    fun setToastParams(toastParams: QuickToastParams): Builder {
-      quickParams.toastParams = toastParams
-      return this
-    }
+    fun toastParams(toastParams: QuickToastParams) = apply { this.toastParams = toastParams }
 
-    fun setDataParams(dataParams: QuickDataParams): Builder {
-      quickParams.dataParams = dataParams
-      return this
-    }
+    fun dataParams(dataParams: QuickDataParams) = apply { this.dataParams = dataParams }
 
-    fun build(): QuickViewParams {
-      val data = quickParams.dataParams
-          ?: throw IllegalArgumentException("QuickDataParams must be set!")
-      if (data.data?.keys.isNullOrEmpty()) {
-        throw IllegalArgumentException("Quick data can not be empty!")
-      }
-      if (data.viewHolders.isNullOrEmpty()) {
-        throw IllegalArgumentException("Quick ViewHolder can not be empty!")
-      }
-      return quickParams
-    }
+    fun build() = QuickViewParams(
+        barParams = barParams,
+        stickyParams = stickyParams,
+        toastParams = toastParams,
+        dataParams = dataParams
+    )
   }
 }

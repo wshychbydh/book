@@ -6,11 +6,12 @@ import android.util.SparseArray
 import android.view.LayoutInflater
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eye.cool.book.R
 import com.eye.cool.book.adapter.RecyclerAdapter
-import com.eye.cool.book.params.BarParams
+import com.eye.cool.book.params.QuickBarParams
 import com.eye.cool.book.params.QuickViewParams
 import com.eye.cool.book.support.IQuickProvider
 import com.eye.cool.book.support.OnLetterSelectedListener
@@ -67,7 +68,7 @@ class QuickView @JvmOverloads constructor(
   fun setup(params: QuickViewParams) {
     this.params = params
     params.dataParams?.apply {
-      viewHolders?.forEach {
+      viewHolders.forEach {
         adapter.registerViewHolder(it.key, it.value)
       }
 
@@ -79,14 +80,14 @@ class QuickView @JvmOverloads constructor(
         values.addAll(it.value)
       }
       stickyKeys = keys
-      params.barParams.letters = data?.keys?.toTypedArray()
       recyclerView.addItemDecoration(StickyItemDecoration(context, params.stickyParams))
-      quickBar.setBarParams(getBarParams(params))
+      val letters = data?.keys?.toTypedArray()
+      quickBar.setupQuickBar(letters, getBarParams(params))
       adapter.updateData(values)
     }
   }
 
-  private fun getBarParams(params: QuickViewParams): BarParams {
+  private fun getBarParams(params: QuickViewParams): QuickBarParams {
     val barParams = params.barParams
     val onLetterSelectedListener = barParams.onLetterSelectedListener
     barParams.onLetterSelectedListener = object : OnLetterSelectedListener {
@@ -97,22 +98,22 @@ class QuickView @JvmOverloads constructor(
     }
     if (barParams.toastTextView == null) {
       val toastParams = params.toastParams
-      quickToastView.setTextColor(toastParams.toastTextColor)
-      quickToastView.textSize = toastParams.toastTextSize
+      quickToastView.setTextColor(toastParams.textColor)
+      quickToastView.textSize = toastParams.textSize
       when {
-        toastParams.toastBackgroundColor != 0 -> {
-          quickToastView.setBackgroundColor(toastParams.toastBackgroundColor)
+        toastParams.backgroundColor != null -> {
+          quickToastView.setBackgroundColor(toastParams.backgroundColor)
         }
-        toastParams.toastBackgroundDrawable != null -> {
-          quickToastView.setBackgroundDrawable(toastParams.toastBackgroundDrawable)
+        toastParams.backgroundDrawable != null -> {
+          ViewCompat.setBackground(quickToastView, toastParams.backgroundDrawable)
         }
         else -> {
           quickToastView.setBackgroundResource(R.drawable.book_quick_toast_background)
         }
       }
       val lp = quickToastView.layoutParams ?: LayoutParams(-2, -2)
-      lp.width = toastParams.toastViewWidth
-      lp.height = toastParams.toastViewHeight
+      lp.width = toastParams.viewWidth
+      lp.height = toastParams.viewHeight
       quickToastView.layoutParams = lp
       barParams.toastTextView = quickToastView
     }

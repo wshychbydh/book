@@ -16,21 +16,18 @@ import com.eye.cool.book.params.QuickStickyParams
  * Only support LinearLayoutManager.Vertical
  */
 
-internal class StickyItemDecoration : RecyclerView.ItemDecoration {
+internal class StickyItemDecoration(
+    private val context: Context,
+    private val params: QuickStickyParams
+) : RecyclerView.ItemDecoration() {
 
-  private val textPaint: Paint
-  private val backgroundPaint: Paint
+  private val textPaint = Paint()
+  private val backgroundPaint = Paint()
   private val textHeight: Float
   private val textBaselineOffset: Float
-  private val context: Context
   private val titleHeight: Float
 
-  private val params: QuickStickyParams
-
-  constructor(context: Context, stickyParams: QuickStickyParams) {
-    this.context = context
-    this.params = stickyParams
-    textPaint = Paint()
+  init {
     textPaint.isAntiAlias = true
     textPaint.textSize = getSpValue(context, params.textSize)
     textPaint.color = params.textColor
@@ -40,7 +37,6 @@ internal class StickyItemDecoration : RecyclerView.ItemDecoration {
 
     titleHeight = getDipValue(context, params.titleHeight)
 
-    backgroundPaint = Paint()
     backgroundPaint.isAntiAlias = true
     backgroundPaint.color = params.backgroundColor
   }
@@ -68,7 +64,8 @@ internal class StickyItemDecoration : RecyclerView.ItemDecoration {
     if (title.isNullOrEmpty()) return
 
     var flag = false
-    if (getTitle(firstVisiblePos + 1) != null && title != getTitle(firstVisiblePos + 1)) {
+    if (getTitle(firstVisiblePos + 1) != null
+        && title != getTitle(firstVisiblePos + 1)) {
       val child = parent.findViewHolderForAdapterPosition(firstVisiblePos)!!.itemView
       if (child.top + child.measuredHeight < titleHeight) {
         c.save()
@@ -81,7 +78,7 @@ internal class StickyItemDecoration : RecyclerView.ItemDecoration {
     val right = parent.width - parent.paddingRight
     val top = parent.paddingTop
     val bottom = top + titleHeight
-    c.drawRect(left.toFloat(), top.toFloat(), right.toFloat(), bottom, backgroundPaint!!)
+    c.drawRect(left.toFloat(), top.toFloat(), right.toFloat(), bottom, backgroundPaint)
     val x = getDipValue(context, params.textPaddingLeft)
     val y = bottom - (titleHeight - textHeight) / 2f - textBaselineOffset
     c.drawText(title!!, x, y, textPaint!!)
@@ -91,7 +88,12 @@ internal class StickyItemDecoration : RecyclerView.ItemDecoration {
     }
   }
 
-  override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+  override fun getItemOffsets(
+      outRect: Rect,
+      view: View,
+      parent: RecyclerView,
+      state: RecyclerView.State
+  ) {
     super.getItemOffsets(outRect, view, parent, state)
     val pos = parent.getChildAdapterPosition(view)
     if (!params.showFirstGroup && pos == 0) {
@@ -136,10 +138,16 @@ internal class StickyItemDecoration : RecyclerView.ItemDecoration {
       if (this.params.keys.indexOfKey(position) > -1) {
         top = child.top - params.topMargin - titleHeight.toInt()
         bottom = top + titleHeight.toInt()
-        c.drawRect(left.toFloat(), top.toFloat(), right.toFloat(), bottom.toFloat(), backgroundPaint!!)
+        c.drawRect(
+            left.toFloat(),
+            top.toFloat(),
+            right.toFloat(),
+            bottom.toFloat(),
+            backgroundPaint
+        )
         val x = getDipValue(context, this.params.textPaddingLeft)
         val y = bottom.toFloat() - (titleHeight - textHeight) / 2f - textBaselineOffset
-        c.drawText(this.params.keys.get(position), x, y, textPaint!!)
+        c.drawText(this.params.keys.get(position), x, y, textPaint)
       } else {
         top = child.top - params.topMargin - getDividerHeight()
         bottom = top + getDividerHeight()

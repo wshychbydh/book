@@ -7,49 +7,49 @@ import androidx.annotation.ColorInt
 /**
  *Created by ycb on 2020/1/7 0007
  */
-class QuickToastParams private constructor() {
+class QuickToastParams private constructor(
+    internal val textSize: Float,
+    @ColorInt
+    internal val textColor: Int,
+    internal val backgroundColor: Int?,
+    internal val backgroundDrawable: Drawable?,
+    internal val viewWidth: Int,
+    internal val viewHeight: Int
+) {
 
-  internal var toastTextSize: Float = 24f
-  internal var toastTextColor: Int = Color.WHITE
-  internal var toastBackgroundColor: Int = 0
-  internal var toastBackgroundDrawable: Drawable? = null
-  internal var toastViewWidth: Int = 120
-  internal var toastViewHeight: Int = 120
+  companion object {
+    inline fun build(block: Builder.() -> Unit) = Builder().apply(block).build()
+  }
 
-  class Builder {
+  data class Builder(
+      var textSize: Float = 24f,
+      @ColorInt
+      var textColor: Int = Color.WHITE,
+      var backgroundColor: Int? = null,
+      var backgroundDrawable: Drawable? = null,
+      var viewWidth: Int = 120,
+      var viewHeight: Int = 120
+  ) {
 
-    private val params = QuickToastParams()
+    fun textSize(textSize: Float) = apply { this.textSize = textSize }
 
-    fun setToastTextSize(textSize: Float): Builder {
-      params.toastTextSize = textSize
-      return this
-    }
+    fun textColor(@ColorInt textColor: Int) = apply { this.textColor = textColor }
 
-    fun setToastTextColor(@ColorInt textColor: Int): Builder {
-      params.toastTextColor = textColor
-      return this
-    }
+    fun backgroundColor(@ColorInt color: Int) = apply { this.backgroundColor = color }
 
-    fun setToastBackgroundColor(@ColorInt backgroundColor: Int): Builder {
-      params.toastBackgroundColor = backgroundColor
-      return this
-    }
+    fun backgroundDrawable(drawable: Drawable) = apply { this.backgroundDrawable = drawable }
 
-    fun setToastBackgroundDrawable(drawable: Drawable): Builder {
-      params.toastBackgroundDrawable = drawable
-      return this
-    }
+    fun viewWidth(width: Int) = apply { this.viewWidth = width }
 
-    fun setToastViewWidth(width: Int): Builder {
-      params.toastViewWidth = width
-      return this
-    }
+    fun viewHeight(height: Int) = apply { this.viewHeight = height }
 
-    fun setToastViewHeight(height: Int): Builder {
-      params.toastViewHeight = height
-      return this
-    }
-
-    fun build() = params
+    fun build() = QuickToastParams(
+        textSize = textSize,
+        textColor = textColor,
+        backgroundColor = backgroundColor,
+        backgroundDrawable = backgroundDrawable,
+        viewWidth = viewWidth,
+        viewHeight = viewHeight
+    )
   }
 }

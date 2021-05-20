@@ -9,7 +9,8 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
-import com.eye.cool.book.params.BarParams
+import androidx.core.view.ViewCompat
+import com.eye.cool.book.params.QuickBarParams
 import kotlin.math.abs
 
 /**
@@ -28,7 +29,7 @@ class QuickBar @JvmOverloads constructor(
 
   private var indicatorY: Float = -1f
 
-  private var params: BarParams? = null
+  private var params: QuickBarParams? = null
 
   private var indicatorRadius: Float = 0f
 
@@ -39,8 +40,8 @@ class QuickBar @JvmOverloads constructor(
     paint.isAntiAlias = true
   }
 
-  fun setBarParams(params: BarParams) {
-    val letters = params?.letters ?: return
+  fun setupQuickBar(letters: Array<String>?, params: QuickBarParams) {
+    if (letters.isNullOrEmpty()) return
     this.params = params
     nodes.clear()
     letters.forEach {
@@ -131,7 +132,7 @@ class QuickBar @JvmOverloads constructor(
     drawLetters(canvas, params)
   }
 
-  private fun drawLetters(canvas: Canvas, params: BarParams) {
+  private fun drawLetters(canvas: Canvas, params: QuickBarParams) {
     nodes.forEach {
       if (params.showSelectedLetterAlways && it.isSelected) {
         paint.color = params.normalTextColor
@@ -142,14 +143,14 @@ class QuickBar @JvmOverloads constructor(
     }
   }
 
-  private fun drawIndicator(canvas: Canvas, params: BarParams) {
+  private fun drawIndicator(canvas: Canvas, params: QuickBarParams) {
     if (params.showIndicator && indicatorY > -1) {
       paint.color = params.indicatorColor
       canvas.drawCircle(measuredWidth / 2f, indicatorY, indicatorRadius, paint)
     }
   }
 
-  private fun drawLettersBg(canvas: Canvas, bgColors: IntArray?) {
+  private fun drawLettersBg(canvas: Canvas, bgColors: List<Int>?) {
     if (bgColors != null && bgColors.isNotEmpty()) {
       var rect = this.rect ?: RectF()
       this.rect = rect
@@ -171,7 +172,7 @@ class QuickBar @JvmOverloads constructor(
       MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
         indicatorY = -1f
         if (params.normalBackgroundDrawable != null) {
-          setBackgroundDrawable(params.normalBackgroundDrawable)
+          ViewCompat.setBackground(this, params.normalBackgroundDrawable)
         }
         selectedNode = null
         invalidate()
@@ -180,7 +181,7 @@ class QuickBar @JvmOverloads constructor(
       else -> {
         indicatorY = event.y
         if (params.pressedBackgroundDrawable != null) {
-          setBackgroundDrawable(params.pressedBackgroundDrawable)
+          ViewCompat.setBackground(this, params.pressedBackgroundDrawable)
         }
         nodes.find { it.isInNode(event.y) }?.let {
           showToast(it.text)

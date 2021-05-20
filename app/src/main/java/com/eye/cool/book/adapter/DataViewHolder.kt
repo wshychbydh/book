@@ -21,7 +21,7 @@ abstract class DataViewHolder<D>(itemView: View) : RecyclerView.ViewHolder(itemV
     private set
 
   protected fun isLastPosition(): Boolean {
-    return dataSize == 0 || adapterPosition == dataSize - 1
+    return dataSize == 0 || bindingAdapterPosition == dataSize - 1
   }
 
   @CallSuper
