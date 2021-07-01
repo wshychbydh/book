@@ -90,11 +90,9 @@ class QuickView @JvmOverloads constructor(
   private fun getBarParams(params: QuickViewParams): QuickBarParams {
     val barParams = params.barParams
     val onLetterSelectedListener = barParams.onLetterSelectedListener
-    barParams.onLetterSelectedListener = object : OnLetterSelectedListener {
-      override fun onSelected(letter: String) {
-        onLetterSelectedListener?.onSelected(letter)
-        layoutManager.scrollToPositionWithOffset(getLetterPosition(letter), 0)
-      }
+    barParams.onLetterSelectedListener = OnLetterSelectedListener { letter ->
+      onLetterSelectedListener?.onSelected(letter)
+      layoutManager.scrollToPositionWithOffset(getLetterPosition(letter), 0)
     }
     if (barParams.toastTextView == null) {
       val toastParams = params.toastParams
